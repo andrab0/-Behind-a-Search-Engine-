@@ -1,0 +1,97 @@
+//// ************************************************************************ \\\\
+Universitatea POLITEHNICA din Bucuresti - Facultatea de Automatica si Calculatoare
+
+**********************************************************************************
+Nume student: Bordincel Andra-Maria, grupa 315CC.
+An de studiu: 2019 - 2020.
+Tema proiect: "Algoritm PageRank".
+Timp aproximativ de implementare: 10 ore.
+
+
+**********************************************************************************
+
+Implementarea cerintelor:
+
+*Cerinta 1. Algoritmul Iterative:
+
+	Am inceput implementarea acestei functii prin deschiderea fisierului de
+intrare utilizand functia "fopen" insotita de parametrul "r" pentru a putea citi
+datele din acesta. In continuare am extras informatia din acesta folosind functia
+"fscanf". De pe prima linie a fisierului am citit numarul "N" care reprezinta
+numarul de resurse web, apoi am continuat prin a salva listele de adiacenta
+intr-o matrice. Dupa aceea am parcurs matricea listelor si am construit matricea
+de adiacenta in functie de legaturile dintre un nod si vecinii sai din matricea
+de liste. Pentru evitarea stituatiilor in care o pagina are link-uri catre ea
+insasi, am considerat valoarea elementelor de pe diagonala principala ca fiind
+0. Odata cu extragerea tuturor datelor necesare, am inchis fisierul de input
+folosind comanda "fclose". In continuare am salvat in vectorul L numarul de
+link-uri corespondent fiecarei pagini, numar calculat prin adunarea elementelor
+de pe fiecare linie a matricei A. Pentru calculul matricei "M", ce reprezinta
+multimea paginilor din care se poate ajunge la pagina A printr-un singur click,
+am inceput prin a o initializa pe aceasta cu valoarea 0 pentru a acoperi toate
+cazurile posibile in care indicele j nu conduce catre indicele i. Pentru
+situatiile in care indicele j conduce catre indicele i, am creat o matrice
+diagonala, care are pe diagonala principala inversele elementelor lui L, pe
+care am inmultit-o cu matricea de adiacenta A. La finalul acestei operatii
+vectorizate, am obtinut matricea M necesara transpunand rezultatul anterior.
+	Am initializat vectorul R0 cu valoarea "1/N", continuand prin utilizarea
+unei variabile semafor "ok". Cat timp valoarea variabilei ok ramane 1, se
+continua calcularea unei noi solutii a lui R. In cazul in care conditia
+"|R(t + 1) − R(t)| >= eps" nu mai este satisfacuta, variabila ok isi schimba
+valoarea, vectorul R ia valoarea celui calculat la pasul anterior si se incheie
+ciclul de cautare. In caz contrat, cat timp conditia atasata mai sus este
+valabila, se continua cautarea vectorului R.
+
+*Cerinta 2. Algoritmul Algebraic:
+
+	Am abordat aceasta functie in analog Algoritmului Iterative pana la
+calculul matricei M, inclusiv. In continuare am calculat valoarea lui R dupa
+formula "R = (PR_Inv(eye(N) - d * M)) * (1 - d) / N * (ones(N,1))", unde eye(N)
+reprezinta o matrice identitate de dimensiune NxN, deci I, iar
+PR_Inv(eye(N) - d * M) reprezinta determinarea inversei matricei (I - d * M)
+prin alogritmul Gram-Schmidt modificat implemntat in cardul laboratorului nr.
+3 de Metode Numerice.
+
+ *Algoritm PR_Inv:
+ 	In aceasta functie am adaugat doi algoritmi implementati in cadrul
+laboratoarelor 2 si 3. Prima parte a functiei consta in extragerea matricilor
+Q si R prin folosirea algoritmului Gram-Schmidt modificat, realizat la exercitiul
+4, dupa care am aplicat algoritmul SST din cardul laboratorului nr. 2, problema 3,
+pentru rezolvarea sistemelor triunghiulare de ecuatii obtinute.
+
+*Cerinta 3: Gradul de Apartenenta:
+
+	Functia aceasta consta in: determinarea parametrilor a si b pentru care
+functia u(x) este continua si verificarea intervalului in care se alfa
+parametrul x. Pentru determinarea parametrilor a si b astfel incat functia u(x)
+sa fie continuna, am aplicat conditiile de continuitate pentru limitele laterale
+ale functiei. Dupa obtinerea celor doua valori a si b, am initializat solutia cu
+y = x * a + b. Mai departe, in functie de cazul de apartenenta la un interval,
+am dat restul valorilor solutiei y.
+
+*Algoritm PageRank:
+
+	In implementarea acestei functii am inceput prin a determina numele
+fisierului de output prin concatenarea numelui fisierului de input cu sirul
+".out" folosind functia "strcat". Mai departe am deschis fisierul de iesire prin
+comanda "fopen" insotita de parametrul "w" pentru a putea insera informatie in
+acesta. Dupa aceea am pastrat procedeul descris mai sus pentru citirea din
+fisierul de input a numarului de resurse web N si afisarea acestuia in
+"fisier_output" prin comanda "fprintf". De asemenea, am pastrat si metoda de
+calculare a matricei de adiacenta. In continuare termin de citit si valorile
+"val1" si "val2", dupa care inchid fisierul de intrare. Pentru calcularea
+vectorilor R1 si R2 am aplicat pe rand cei doi algoritmi implementati si
+descrisi mai sus, Iterative si Algebraic si am continuat afisarea acestora in
+fisierul de iesire. Mai departe am determinat vectorul PR1 sortat cu ajutorul
+comenzii "sort" insotit de parametrul "descend". Pe langa vectorul PR1 am scos
+si un vector pentru indicii j corespunzatori numerelor paginilor care au obtinut
+un anumit loc. In continuare am determinat gradul de apartenenta pentru fiecare
+din elementele vectorului PR1, iar apoi am printat aceste rezultate in fisierul
+de iesire si am inchis acest fisier.
+
+*_BIBLIOGRAFIE_*:
+
+- comanda "sort" https://www.mathworks.com/help/matlab/ref/sort.html
+- formule vectori R de PageRank: http://en.wikipedia.org/wiki/PageRank
+- Gram-Schmidt modificat: https://acs.curs.pub.ro/2019/pluginfile.php/61581/mod_resource/content/3/Lab_3_MN_2017.pdf
+- SST: https://acs.curs.pub.ro/2019/pluginfile.php/61576/mod_resource/content/1/lab_mn_02.pdf
